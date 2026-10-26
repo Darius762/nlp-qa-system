@@ -14,6 +14,9 @@ Faza 1 — data loading + EDA. `data.py` gata, urmeaza EDA.
 - `requirements.txt` convertit din UTF-16 in UTF-8
 - `src/qa/data.py`: `load_squad` (subset cu seed), `build_corpus` (paragrafe unice + maparea intrebare -> paragraph_id), `group_by_article`; CLI `python -m src.qa.data --split validation --n-samples 200`. Verificat: validation = 10570 intrebari, 48 articole, 2067 paragrafe. Cache HF in `data/hf_cache`.
 
+- Docs pentru predare: DOCUMENTATION_NOTES, DEPLOYMENT, REQUIREMENTS_CHECKLIST, REFERENCES, `docs/figures/`
+- `CLAUDE.md` scos din git (in `.gitignore`), ramane doar local
+
 ## In lucru
 - nimic
 

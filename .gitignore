@@ -9,3 +9,6 @@ wandb/
 .env
 *.safetensors
 *.bin
+
+CLAUDE.md
+.claude/
