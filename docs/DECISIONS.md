@@ -21,3 +21,8 @@ Jurnal de decizii. Format: data — decizie — motiv — alternative respinse.
 - **Decizie:** local (Windows, i5-1135G7, 16GB RAM, fara GPU) se dezvolta codul si se testeaza doar pe subseturi mici (~200 exemple); torch instalat in varianta CPU.
 - **Motiv:** fara GPU local; subseturile mici permit verificarea rapida a codului inainte de rularea pe Colab.
 - **Alternative respinse:** rulari complete locale (ore/zile pe CPU).
+
+## 2026-10-26 — Corpus retriever: paragrafele din SQuAD validation
+- **Decizie:** corpusul pentru open-domain contine paragrafele unice din split-ul validation (48 articole, 2067 paragrafe). `build_corpus` accepta mai multe split-uri, deci se poate extinde ulterior cu train.
+- **Motiv:** rapid pe CPU, intrebarile de evaluare au paragraful corect in corpus, setup folosit frecvent in proiecte similare.
+- **Alternative respinse (deocamdata):** train + validation (~20k paragrafe), mai realist, dar mai lent; ramane optiune de extindere.
