@@ -32,7 +32,8 @@ pip install -r requirements.txt
 Note:
 - `requirements.txt` fixeaza `torch==2.14.1+cpu`; daca pip nu il gaseste, se instaleaza separat: `pip install torch --index-url https://download.pytorch.org/whl/cpu`, apoi restul.
 - Modelul spaCy `en_core_web_sm` e inclus in `requirements.txt` ca link direct.
-- Resurse NLTK: _de completat (ex. punkt) cand se folosesc_
+- Resurse NLTK: `punkt_tab` (descarcat automat in cod cu `nltk.download("punkt_tab", quiet=True)`, ajunge in `%APPDATA%\nltk_data` pe Windows). Manual: `python -c "import nltk; nltk.download('punkt_tab')"`
+- Tokenizer-ul `distilbert-base-uncased` se descarca automat in `data/hf_cache` la prima rulare a EDA.
 
 ## Date
 Nu sunt in git. Se descarca automat la prima rulare in `data/hf_cache`:
@@ -50,6 +51,7 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 | Pas | Comanda | Durata pe CPU | Output |
 |-----|---------|---------------|--------|
 | Data loading | `python -m src.qa.data --split validation` | < 1 min | statistici in consola |
+| EDA | deschide `notebooks/eda.ipynb` in VS Code/Jupyter, kernel din `.venv`, Run All | ~1-2 min | grafice in `docs/figures/` |
 | Baseline | _de completat_ | | |
 | Reader (evaluare) | _de completat_ | | |
 | Retriever | _de completat_ | | |
@@ -63,4 +65,4 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 ## Verificat pe
 | Data | Sistem | Python | Rezultat |
 |------|--------|--------|----------|
-| 2026-10-26 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.data` OK |
+| 2026-10-26 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.data` OK, `eda.ipynb` OK |

@@ -10,8 +10,9 @@ Cerintele temei si unde sunt acoperite in proiect. De verificat inainte de preda
 | Preprocessing | `src/qa/preprocess.py` | de facut |
 | Model | baseline, reader, retriever | de facut |
 | Evaluation (EM, F1, Recall@k) | `src/qa/evaluate.py` | de facut |
-| NLTK folosit vizibil | _de completat (tokenizare/sentence split)_ | de facut |
-| spaCy folosit vizibil | baseline: sentence split + NER | de facut |
+| Analiza exploratorie a datelor | `notebooks/eda.ipynb`, figuri in `docs/figures/` | gata |
+| NLTK folosit vizibil | EDA: `word_tokenize`, Punkt sentence split (gata); baseline: de facut | partial |
+| spaCy folosit vizibil | EDA: NER pe pasaje (gata); baseline: NER + reguli (de facut) | partial |
 | scikit-learn folosit vizibil | TF-IDF (baseline + retriever) | de facut |
 | Hugging Face folosit vizibil | `datasets` (gata), `transformers`, HF Hub | partial |
 | Comparatie baseline vs DistilBERT vs BERT | `docs/EXPERIMENTS.md` | de facut |
