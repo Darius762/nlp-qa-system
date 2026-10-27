@@ -36,7 +36,13 @@ Figurile se salveaza in `docs/figures/` (PNG, nume descriptive, ex. `eda_context
 - Rezultat (validation): EM 18,98, F1 24,68; propozitia corecta aleasa in 76,1% din cazuri.
 - Interpretare: selectia propozitiei merge relativ bine, pierderea e la extragerea span-ului; regulile NER functioneaza pe tipurile cu entitate clara (when EM 56, how many 43, who 35), iar what/how/why (63% din date) raman slabe (EM 4-11). Asta motiveaza reader-ul BERT, care invata direct span-ul.
 ### 4.2 Reader (DistilBERT, BERT-base)
-_de completat_
+- Formulare: QA extractiv = prezicerea pozitiei de start si de end a raspunsului in pasaj; peste encoder se pune un strat liniar (`qa_outputs`) care da doua scoruri per token.
+- Intrare: `[CLS] intrebare [SEP] pasaj [SEP]`, max_length 384. Pasajele mai lungi se impart in ferestre care se suprapun cu 128 tokeni (stride), ca raspunsul sa nu fie taiat la granita.
+- Etichete la antrenare: offset mapping-ul tokenizer-ului transforma pozitia raspunsului din caractere in tokeni; ferestrele care nu contin raspunsul complet sunt etichetate pe [CLS]. Verificat: 99,4% din ferestre decodeaza exact raspunsul, restul sunt adnotari in mijlocul unui cuvant.
+- Inferenta: pentru fiecare fereastra, top-20 start x top-20 end, doar combinatii valide (in pasaj, end >= start, <= 30 tokeni), scor = logit start + logit end; se alege cel mai bun span din toate ferestrele si se mapeaza inapoi in text cu offset-urile.
+- Validarea codului: pe un model public antrenat (distilbert-base-cased-distilled-squad) obtinem EM 78,6 / F1 86,3 pe 500 exemple, practic scorurile publicate (79,1 / 86,9).
+- Antrenare: `Trainer` HF, 2 epoci, lr 3e-5, warmup 10%, weight decay 0,01, fp16, Colab T4. Modele: `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`.
+- Rezultate: _de completat dupa Colab_
 ### 4.3 Retriever (TF-IDF, BM25)
 _de completat_
 ### 4.4 Pipeline open-domain

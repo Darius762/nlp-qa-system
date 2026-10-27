@@ -4,7 +4,7 @@ Cerintele temei si unde sunt acoperite in proiect. De verificat inainte de preda
 
 | Cerinta | Unde | Stare |
 |---------|------|-------|
-| Model extractiv bazat pe BERT | `src/qa/reader.py`, `src/qa/train.py` | de facut |
+| Model extractiv bazat pe BERT | `src/qa/reader.py`, `src/qa/train.py` (cod gata si validat, antrenare pe Colab de facut) | partial |
 | Raspuns pe baza unui pasaj | reader + demo, mod pasaj dat | de facut |
 | Data loading | `src/qa/data.py` | gata |
 | Preprocessing | `src/qa/preprocess.py` | gata |

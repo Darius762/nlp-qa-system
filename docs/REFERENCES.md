@@ -19,4 +19,6 @@ Surse de citat in documentatia finala. Se adauga pe masura ce se folosesc.
 
 ## Dataset / modele
 - SQuAD v1.1: https://huggingface.co/datasets/rajpurkar/squad
-- Modele de baza: `distilbert-base-uncased`, `bert-base-uncased` (de confirmat la antrenare)
+- Modele de baza: `distilbert-base-uncased`, `bert-base-uncased`
+- Model public folosit doar pentru validarea codului de evaluare: `distilbert/distilbert-base-cased-distilled-squad`
+- Modelele noastre: `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`

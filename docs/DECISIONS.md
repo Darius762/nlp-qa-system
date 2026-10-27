@@ -37,6 +37,21 @@ Jurnal de decizii. Format: data — decizie — motiv — alternative respinse.
 - **Motiv:** regulile vin direct din heatmap-ul din EDA (when -> DATE 79%, how many -> CARDINAL 68% etc.); top-1 ramane referinta ca sa nu alegem configuratia privind setul de evaluare.
 - **Alternative respinse:** clasificator de tip de raspuns antrenat (iese din ideea de baseline cu reguli); intoarcerea propozitiei intregi (F1 foarte mic, raspunsurile au mediana 2 tokeni).
 
+## 2026-10-27 — Reader: configuratie de antrenare
+- **Decizie:** `distilbert-base-uncased` si `bert-base-uncased`; 2 epoci, lr 3e-5, batch 16 (DistilBERT) / 12 (BERT), weight decay 0.01, warmup 10%, max_length 384, stride 128, fp16, seed 42; postprocesare n-best 20, lungime maxima raspuns 30 tokeni. Modele pe Hub: `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`.
+- **Motiv:** hiperparametrii standard pentru SQuAD (articolul BERT si exemplele HF), comparabili cu literatura; uncased e varianta clasica din articole; 384/128 acopera 98,3% din perechi intr-o singura fereastra (EDA).
+- **Alternative respinse:** cautare de hiperparametri (cost GPU, nu e scopul temei); modele cased (rezultate apropiate, comparatie mai putin directa cu literatura).
+
+## 2026-10-27 — Antrenare: checkpoint-uri pe Hub si requirements separat pentru Colab
+- **Decizie:** `hub_strategy="checkpoint"` (ultimul checkpoint urcat pe Hub in timpul antrenarii, reluare cu `--resume-from-hub`); predictiile si metricile se urca in `results/` din repo-ul modelului; Colab instaleaza `requirements-colab.txt` (doar bibliotecile HF fixate + nltk/sklearn), nu `requirements.txt`.
+- **Motiv:** sesiunile Colab se pot deconecta; `requirements.txt` local are `torch+cpu` care ar strica GPU-ul pe Colab.
+- **Alternative respinse:** checkpoint-uri pe Google Drive (mai greu de reluat din cod); un singur requirements cu marker-e de platforma (fragil).
+
+## 2026-10-27 — Validarea reader-ului cu un model public
+- **Decizie:** inainte de antrenare, pipeline-ul de evaluare (`reader.py`: ferestre, offset mapping, n-best) se verifica pe `distilbert/distilbert-base-cased-distilled-squad`, deja antrenat.
+- **Motiv:** un bug in postprocesare ar strica toate rezultatele fara sa fie evident; daca obtinem scorurile publicate ale modelului, codul e corect.
+- **Rezultat:** EM 78,60 / F1 86,34 pe 500 exemple, fata de 79,1 / 86,9 raportat pe tot setul -> corect.
+
 ## 2026-10-27 — Metrici: implementare proprie EM/F1, validata cu HF
 - **Decizie:** `src/qa/evaluate.py` implementeaza EM/F1 dupa scriptul oficial SQuAD (normalizare + maxim peste referinte), cu defalcare pe tip de intrebare si lungime pasaj; `--check-hf` compara cu metrica `squad` din HF `evaluate`.
 - **Motiv:** avem nevoie de scoruri per exemplu pentru analiza erorilor; validarea arata ca cifrele sunt identice cu cele oficiale.

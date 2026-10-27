@@ -25,6 +25,11 @@ Fiecare antrenare/evaluare: data, model, hiperparametri, EM, F1, Recall@k, link 
 
 ## Detalii
 
+### 2026-10-27 — Verificari reader (fara antrenare reala)
+- Aliniere etichete (`prepare_train_features`, distilbert-base-uncased, 3000 exemple train -> 3030 ferestre): 2991/3008 ferestre cu raspuns decodeaza exact raspunsul; cele 17 diferente sunt raspunsuri adnotate in mijlocul unui cuvant (ex. "x. Men" din "sex. Men") sau artefacte de decodare ("qur ' an"); 22 ferestre fara raspuns -> [CLS].
+- Model public `distilbert/distilbert-base-cased-distilled-squad`, `python -m src.qa.reader --n-samples 500`: EM 78,60 / F1 86,34 (raportat pe tot setul: 79,1 / 86,9) -> postprocesarea e corecta. 141 s pe CPU.
+- Smoke test `src.qa.train` local: 200 exemple train, 10 pasi, CPU, ~2 min, loss 5.9 -> pipeline-ul train + eval + salvare ruleaza cap-coada.
+
 ### 2026-10-27 — Baseline clasic (TF-IDF sentence selection + spaCy NER rules)
 - Model: `src/qa/baseline.py`, fara deep learning
 - Date: TF-IDF fit pe 93.596 propozitii din paragrafele train (vocab 74.093 stem-uri); evaluare pe validation complet (10.570 intrebari)

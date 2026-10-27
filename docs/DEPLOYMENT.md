@@ -43,8 +43,12 @@ python -m src.qa.data --split validation
 
 ## Modele
 Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
-- DistilBERT fine-tuned: _link HF Hub_
-- BERT-base fine-tuned: _link HF Hub_
+- DistilBERT fine-tuned: https://huggingface.co/dariurs/distilbert-base-uncased-squad (_dupa antrenarea pe Colab_)
+- BERT-base fine-tuned: https://huggingface.co/dariurs/bert-base-uncased-squad (_dupa antrenarea pe Colab_)
+- Modelele se descarca in cache-ul HF implicit (`~/.cache/huggingface`, pe Windows `C:\Users\<user>\.cache\huggingface`), ~260 MB DistilBERT, ~420 MB BERT-base.
+
+## Antrenare (doar pe Colab, nu e necesara pentru rulare)
+`notebooks/train_colab.ipynb`: cloneaza repo-ul de pe GitHub, instaleaza `requirements-colab.txt`, login HF (secret `HF_TOKEN`), ruleaza `python -m src.qa.train` pentru ambele modele si le urca pe Hub. Codul trebuie sa fie push-uit pe GitHub inainte, notebook-ul ia ultima versiune de acolo.
 
 ## Rulare pe module
 
@@ -55,7 +59,8 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 | Preprocessing (exemple) | `python -m src.qa.preprocess --n-samples 3` | < 30 s | exemple procesate in consola |
 | Baseline | `python -m src.qa.baseline` (test rapid: `--n-samples 200 --output-prefix results/baseline_test`) | ~1,5 min (200 ex: ~35 s) | `results/baseline_predictions.json`, `results/baseline_metrics.json` |
 | Evaluare predictii | `python -m src.qa.evaluate --predictions results/baseline_predictions.json [--check-hf]` | < 30 s | `results/baseline_metrics.json` |
-| Reader (evaluare) | _de completat_ | | |
+| Reader (evaluare) | `python -m src.qa.reader --model dariurs/distilbert-base-uncased-squad` (test rapid: `--n-samples 200`) | DistilBERT: ~0,3 s/intrebare (200 ex: ~1 min; tot setul ~45-60 min) | `results/reader_<model>_predictions.json`, `_metrics.json` |
+| Train (smoke test) | `python -m src.qa.train --train-samples 200 --eval-samples 100 --max-steps 10 --batch-size 8` | ~2-3 min | `checkpoints/` (ignorat de git) |
 | Retriever | _de completat_ | | |
 | Pipeline | _de completat_ | | |
 | Demo | _de completat_ | | |
