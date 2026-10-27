@@ -52,6 +52,21 @@ Jurnal de decizii. Format: data — decizie — motiv — alternative respinse.
 - **Motiv:** un bug in postprocesare ar strica toate rezultatele fara sa fie evident; daca obtinem scorurile publicate ale modelului, codul e corect.
 - **Rezultat:** EM 78,60 / F1 86,34 pe 500 exemple, fata de 79,1 / 86,9 raportat pe tot setul -> corect.
 
+## 2026-10-27 — Retriever: TF-IDF + BM25 pe aceeasi tokenizare, BM25 implicit in pipeline
+- **Decizie:** ambele metode folosesc `tokenize_for_tfidf` (NLTK + stemming, fara stopwords). TF-IDF: 1-2 grame, `sublinear_tf`, fit pe corpusul de paragrafe indexat. BM25: `rank_bm25` cu k1 1,5 / b 0,75 (valorile standard). Pipeline-ul open-domain foloseste BM25 implicit.
+- **Motiv:** aceeasi tokenizare face comparatia corecta (diferenta vine doar din ponderare); fit pe corpusul indexat e practica standard in IR si nu foloseste etichete; BM25 a iesit mai bun la toate valorile k.
+- **Alternative respinse:** retriever dens (DPR / sentence embeddings), cost de antrenare si iese din cerinta (sklearn); tuning k1/b pe validation (ar fi tuning pe setul de evaluare).
+
+## 2026-10-27 — Pipeline open-domain: scorul reader-ului decide intre paragrafe
+- **Decizie:** BM25 aduce top-k paragrafe, reader-ul (DistilBERT implicit) le citeste intr-un singur batch (`QAReader.answer_many`), raspunsul final e cel cu scorul maxim al reader-ului (logit start + logit end). Evaluare pe 500 de intrebari (seed 42) pentru k = 1, 3, 5, 10, plus reader pe paragraful corect pe aceleasi intrebari (limita superioara). Top-k se calculeaza dintr-o singura rulare cu k maxim.
+- **Motiv:** abordarea din DrQA (Chen et al., 2017); pe CPU evaluarea costa ~4 s/intrebare la k=10, deci 500 de intrebari (~30 min) e un compromis rezonabil; limita superioara pe acelasi subset separa erorile retriever-ului de cele ale reader-ului.
+- **Alternative respinse:** combinatie ponderata scor retriever + scor reader (necesita tuning, de incercat ca imbunatatire); evaluare pe tot setul local (~12 h pe CPU).
+
+## 2026-10-27 — Checkpoint-urile intermediare de pe HF Hub nu mai sunt necesare
+- **Decizie:** folderul `last-checkpoint/` din `dariurs/distilbert-base-uncased-squad` si `dariurs/bert-base-uncased-squad` poate fi sters.
+- **Motiv:** contine doar starea pentru reluarea antrenarii (optimizer, scheduler, rng); antrenarea s-a terminat, modelul final e in radacina repo-ului si din el se incarca tot (`QAReader`, demo). Repo-ul devine mai mic pentru descarcare.
+- **Alternative respinse:** pastrarea lui (util doar pentru a continua antrenarea, ceea ce nu e in plan).
+
 ## 2026-10-27 — Metrici: implementare proprie EM/F1, validata cu HF
 - **Decizie:** `src/qa/evaluate.py` implementeaza EM/F1 dupa scriptul oficial SQuAD (normalizare + maxim peste referinte), cu defalcare pe tip de intrebare si lungime pasaj; `--check-hf` compara cu metrica `squad` din HF `evaluate`.
 - **Motiv:** avem nevoie de scoruri per exemplu pentru analiza erorilor; validarea arata ca cifrele sunt identice cu cele oficiale.

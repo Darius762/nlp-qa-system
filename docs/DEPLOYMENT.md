@@ -63,8 +63,9 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 | Reader (evaluare) | `python -m src.qa.reader --model dariurs/distilbert-base-uncased-squad` (test rapid: `--n-samples 200`) | DistilBERT: ~0,3 s/intrebare (200 ex: ~1 min; tot setul ~45-60 min) | `results/reader_<model>_predictions.json`, `_metrics.json` |
 | Train (smoke test) | `python -m src.qa.train --train-samples 200 --eval-samples 100 --max-steps 10 --batch-size 8` | ~2-3 min | `checkpoints/` (ignorat de git) |
 | Rezultate + figuri comparatie | `notebooks/results.ipynb`, Run All | < 10 s | tabele + `docs/figures/results_*.png` |
-| Retriever | _de completat_ | | |
-| Pipeline | _de completat_ | | |
+| Retriever | `python -m src.qa.retriever` (doar BM25: `--methods bm25`) | ~45 s (index 3-4 s per metoda) | `results/retriever_metrics.json` |
+| Pipeline (o intrebare) | `python -m src.qa.pipeline --question "Which NFL team won Super Bowl 50?"` | ~10 s (incarcare) + ~1-2 s | raspuns + candidatii din top-k |
+| Pipeline (evaluare) | `python -m src.qa.pipeline --n-samples 500` (test rapid: `--n-samples 20`) | ~4 s/intrebare la k=10 (500: ~30 min) | `results/pipeline_bm25_<reader>_metrics.json` |
 | Demo | _de completat_ | | |
 
 ## Probleme cunoscute
@@ -78,3 +79,4 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 |------|--------|--------|----------|
 | 2026-10-26 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.data` OK, `eda.ipynb` OK |
 | 2026-10-27 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.preprocess`, `src.qa.baseline`, `src.qa.evaluate --check-hf` OK |
+| 2026-10-27 | Windows 10, CPU (dezvoltare) | 3.13.1 | `QAReader` cu modelul de pe Hub OK, `src.qa.retriever` OK, `results.ipynb` OK |

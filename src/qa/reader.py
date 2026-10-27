@@ -144,25 +144,35 @@ class QAReader:
         self.max_answer_length = max_answer_length
 
     def answer(self, question, context):
-        encoded = tokenize_pairs(self.tokenizer, [question], [context], self.max_length, self.stride, return_tensors="pt")
+        return self.answer_many(question, [context])[0]
+
+    def answer_many(self, question, contexts):
+        encoded = tokenize_pairs(
+            self.tokenizer, [question] * len(contexts), contexts, self.max_length, self.stride, return_tensors="pt"
+        )
         offset_mapping = encoded.pop("offset_mapping").tolist()
-        encoded.pop("overflow_to_sample_mapping")
+        sample_map = encoded.pop("overflow_to_sample_mapping").tolist()
         with torch.no_grad():
             outputs = self.model(**{k: v.to(self.device) for k, v in encoded.items()})
         start_logits = outputs.start_logits.cpu().numpy()
         end_logits = outputs.end_logits.cpu().numpy()
 
-        best = None
-        for i in range(len(offset_mapping)):
+        best = [None] * len(contexts)
+        for i, context_index in enumerate(sample_map):
             sequence_ids = encoded.sequence_ids(i)
             offsets = [o if sequence_ids[k] == 1 else None for k, o in enumerate(offset_mapping[i])]
             candidate = best_span(start_logits[i], end_logits[i], offsets, self.n_best, self.max_answer_length)
-            if candidate is not None and (best is None or candidate[0] > best[0]):
-                best = candidate
-        if best is None:
-            return {"answer": "", "score": float("-inf"), "start": 0, "end": 0}
-        score, start, end = best
-        return {"answer": context[start:end], "score": score, "start": start, "end": end}
+            if candidate is not None and (best[context_index] is None or candidate[0] > best[context_index][0]):
+                best[context_index] = candidate
+
+        answers = []
+        for context, candidate in zip(contexts, best):
+            if candidate is None:
+                answers.append({"answer": "", "score": float("-inf"), "start": 0, "end": 0})
+            else:
+                score, start, end = candidate
+                answers.append({"answer": context[start:end], "score": score, "start": start, "end": end})
+        return answers
 
 
 def parse_args():

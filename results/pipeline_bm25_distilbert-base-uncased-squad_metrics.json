@@ -1,0 +1,297 @@
+{
+  "top1": {
+    "exact_match": 57.2,
+    "f1": 65.75,
+    "retrieval_recall": 75.8,
+    "answer_from_gold_paragraph": 75.8,
+    "by_question_type": {
+      "what": {
+        "count": 290,
+        "exact_match": 56.55,
+        "f1": 64.02
+      },
+      "who": {
+        "count": 50,
+        "exact_match": 64.0,
+        "f1": 66.0
+      },
+      "how many": {
+        "count": 33,
+        "exact_match": 48.48,
+        "f1": 63.25
+      },
+      "which": {
+        "count": 32,
+        "exact_match": 65.62,
+        "f1": 73.21
+      },
+      "when": {
+        "count": 31,
+        "exact_match": 80.65,
+        "f1": 83.23
+      },
+      "where": {
+        "count": 20,
+        "exact_match": 50.0,
+        "f1": 61.02
+      },
+      "how": {
+        "count": 18,
+        "exact_match": 38.89,
+        "f1": 68.17
+      },
+      "why": {
+        "count": 12,
+        "exact_match": 33.33,
+        "f1": 55.31
+      },
+      "how much": {
+        "count": 8,
+        "exact_match": 62.5,
+        "f1": 70.83
+      },
+      "other": {
+        "count": 3,
+        "exact_match": 0.0,
+        "f1": 40.0
+      },
+      "whom": {
+        "count": 2,
+        "exact_match": 50.0,
+        "f1": 50.0
+      },
+      "whose": {
+        "count": 1,
+        "exact_match": 100.0,
+        "f1": 100.0
+      }
+    }
+  },
+  "top3": {
+    "exact_match": 61.2,
+    "f1": 68.96,
+    "retrieval_recall": 86.2,
+    "answer_from_gold_paragraph": 76.6,
+    "by_question_type": {
+      "what": {
+        "count": 290,
+        "exact_match": 60.34,
+        "f1": 67.44
+      },
+      "who": {
+        "count": 50,
+        "exact_match": 70.0,
+        "f1": 71.72
+      },
+      "how many": {
+        "count": 33,
+        "exact_match": 54.55,
+        "f1": 66.28
+      },
+      "which": {
+        "count": 32,
+        "exact_match": 68.75,
+        "f1": 74.99
+      },
+      "when": {
+        "count": 31,
+        "exact_match": 80.65,
+        "f1": 83.23
+      },
+      "where": {
+        "count": 20,
+        "exact_match": 50.0,
+        "f1": 61.02
+      },
+      "how": {
+        "count": 18,
+        "exact_match": 44.44,
+        "f1": 69.04
+      },
+      "why": {
+        "count": 12,
+        "exact_match": 33.33,
+        "f1": 57.16
+      },
+      "how much": {
+        "count": 8,
+        "exact_match": 75.0,
+        "f1": 75.0
+      },
+      "other": {
+        "count": 3,
+        "exact_match": 0.0,
+        "f1": 40.0
+      },
+      "whom": {
+        "count": 2,
+        "exact_match": 100.0,
+        "f1": 100.0
+      },
+      "whose": {
+        "count": 1,
+        "exact_match": 100.0,
+        "f1": 100.0
+      }
+    }
+  },
+  "top5": {
+    "exact_match": 61.2,
+    "f1": 69.11,
+    "retrieval_recall": 89.4,
+    "answer_from_gold_paragraph": 74.0,
+    "by_question_type": {
+      "what": {
+        "count": 290,
+        "exact_match": 60.0,
+        "f1": 67.38
+      },
+      "who": {
+        "count": 50,
+        "exact_match": 74.0,
+        "f1": 75.72
+      },
+      "how many": {
+        "count": 33,
+        "exact_match": 54.55,
+        "f1": 66.28
+      },
+      "which": {
+        "count": 32,
+        "exact_match": 68.75,
+        "f1": 74.99
+      },
+      "when": {
+        "count": 31,
+        "exact_match": 77.42,
+        "f1": 82.15
+      },
+      "where": {
+        "count": 20,
+        "exact_match": 55.0,
+        "f1": 71.85
+      },
+      "how": {
+        "count": 18,
+        "exact_match": 44.44,
+        "f1": 67.98
+      },
+      "why": {
+        "count": 12,
+        "exact_match": 33.33,
+        "f1": 50.45
+      },
+      "how much": {
+        "count": 8,
+        "exact_match": 75.0,
+        "f1": 75.0
+      },
+      "other": {
+        "count": 3,
+        "exact_match": 0.0,
+        "f1": 9.52
+      },
+      "whom": {
+        "count": 2,
+        "exact_match": 50.0,
+        "f1": 50.0
+      },
+      "whose": {
+        "count": 1,
+        "exact_match": 100.0,
+        "f1": 100.0
+      }
+    }
+  },
+  "top10": {
+    "exact_match": 62.8,
+    "f1": 69.84,
+    "retrieval_recall": 94.0,
+    "answer_from_gold_paragraph": 74.6,
+    "by_question_type": {
+      "what": {
+        "count": 290,
+        "exact_match": 61.38,
+        "f1": 67.73
+      },
+      "who": {
+        "count": 50,
+        "exact_match": 74.0,
+        "f1": 75.15
+      },
+      "how many": {
+        "count": 33,
+        "exact_match": 54.55,
+        "f1": 66.28
+      },
+      "which": {
+        "count": 32,
+        "exact_match": 78.12,
+        "f1": 84.37
+      },
+      "when": {
+        "count": 31,
+        "exact_match": 77.42,
+        "f1": 82.15
+      },
+      "where": {
+        "count": 20,
+        "exact_match": 55.0,
+        "f1": 71.85
+      },
+      "how": {
+        "count": 18,
+        "exact_match": 44.44,
+        "f1": 66.13
+      },
+      "why": {
+        "count": 12,
+        "exact_match": 41.67,
+        "f1": 52.75
+      },
+      "how much": {
+        "count": 8,
+        "exact_match": 62.5,
+        "f1": 62.5
+      },
+      "other": {
+        "count": 3,
+        "exact_match": 33.33,
+        "f1": 42.86
+      },
+      "whom": {
+        "count": 2,
+        "exact_match": 50.0,
+        "f1": 50.0
+      },
+      "whose": {
+        "count": 1,
+        "exact_match": 100.0,
+        "f1": 100.0
+      }
+    }
+  },
+  "gold_paragraph": {
+    "exact_match": 74.6,
+    "f1": 83.59
+  },
+  "questions": 500,
+  "seconds": 1608,
+  "config": {
+    "reader": "dariurs/distilbert-base-uncased-squad",
+    "retriever": "bm25",
+    "split": "validation",
+    "cache_dir": "data/hf_cache",
+    "question": null,
+    "top_k": 5,
+    "ks": [
+      1,
+      3,
+      5,
+      10
+    ],
+    "n_samples": 500,
+    "seed": 42,
+    "output_prefix": null
+  }
+}

@@ -17,15 +17,54 @@ Fiecare antrenare/evaluare: data, model, hiperparametri, EM, F1, Recall@k, link 
 
 | Data | Metoda | Recall@1 | Recall@5 | Recall@10 | Recall@20 |
 |------|--------|----------|----------|-----------|-----------|
-| — | — | — | — | — | — |
+| 2026-10-27 | TF-IDF unigrame | 69.69 | 89.39 | 93.53 | 96.17 |
+| 2026-10-27 | TF-IDF 1-2 grame | 72.07 | 89.91 | 93.63 | 96.11 |
+| 2026-10-27 | BM25 (k1=1.5, b=0.75) | 75.05 | 91.37 | 94.38 | 96.52 |
 
 ### Pipeline open-domain
 
 | Data | Retriever | Reader | top-k | EM | F1 |
 |------|-----------|--------|-------|----|----|
-| — | — | — | — | — | — |
+| 2026-10-27 | BM25 | DistilBERT | 1 | 57.20 | 65.75 |
+| 2026-10-27 | BM25 | DistilBERT | 3 | 61.20 | 68.96 |
+| 2026-10-27 | BM25 | DistilBERT | 5 | 61.20 | 69.11 |
+| 2026-10-27 | BM25 | DistilBERT | 10 | 62.80 | 69.84 |
+| 2026-10-27 | paragraf corect dat | DistilBERT | — | 74.60 | 83.59 |
+
+(500 de intrebari din validation, seed 42)
 
 ## Detalii
+
+### 2026-10-27 — Pipeline open-domain BM25 + DistilBERT
+- Comanda: `python -m src.qa.pipeline --n-samples 500` (BM25, `dariurs/distilbert-base-uncased-squad`, ks 1 3 5 10, seed 42)
+- Selectie raspuns: scorul maxim al reader-ului (logit start + logit end) peste top-k paragrafe
+- Mediu: local CPU, 1.608 s (~3,2 s/intrebare pentru 10 paragrafe + paragraful corect)
+
+| | EM | F1 | Recall@k BM25 | raspuns din paragraful corect |
+|---|---|---|---|---|
+| top-1 | 57,20 | 65,75 | 75,8 | 75,8 |
+| top-3 | 61,20 | 68,96 | 86,2 | 76,6 |
+| top-5 | 61,20 | 69,11 | 89,4 | 74,0 |
+| top-10 | 62,80 | 69,84 | 94,0 | 74,6 |
+| paragraf corect dat | 74,60 | 83,59 | — | — |
+
+- Fisiere: `results/pipeline_bm25_distilbert-base-uncased-squad_metrics.json`, `..._top10_predictions.json`; figura `docs/figures/results_pipeline_topk.png`
+- Observatii: pe acest subset reader-ul cu paragraful corect are EM 74,6 (vs 77,6 pe tot setul -> subsetul e putin mai greu). Mai multe paragrafe ajuta (+5,6 EM de la k=1 la k=10), dar castigul e mult sub cresterea recall-ului (75,8 -> 94,0): procentul de raspunsuri luate din paragraful corect ramane ~75%. Cauza: scorurile reader-ului nu sunt calibrate intre paragrafe, iar paragrafele vecine din acelasi articol dau span-uri plauzibile cu scor mare (ex. "Which NFL team won Super Bowl 50?" -> paragraful #1 da "Carolina Panthers"). Diferenta pana la limita superioara: ~14 F1.
+
+### 2026-10-27 — Retriever TF-IDF vs BM25 (Recall@k)
+- Corpus: 2.067 paragrafe unice din validation (48 articole); intrebari: toate 10.570; Recall@k = paragraful sursa al intrebarii in top-k
+- Tokenizare comuna: NLTK `word_tokenize` + PorterStemmer, stopwords sklearn (`tokenize_for_tfidf`)
+- TF-IDF: sklearn `TfidfVectorizer`, `sublinear_tf=True`, fit pe corpusul de paragrafe (fara etichete), cosine; BM25: `rank_bm25.BM25Okapi`, k1 1,5, b 0,75
+- Comanda: `python -m src.qa.retriever` (ambele), `python -m src.qa.retriever --methods tfidf --ngram-max 1 --output results/retriever_tfidf_unigram_metrics.json`
+
+| Metoda | R@1 | R@3 | R@5 | R@10 | R@20 | MRR | Articol R@1 | Articol R@5 | Timp (index + 10.570 interogari) |
+|---|---|---|---|---|---|---|---|---|---|
+| TF-IDF unigrame | 69,69 | 84,99 | 89,39 | 93,53 | 96,17 | 0,784 | — | 98,20 | 3 s + 4 s |
+| TF-IDF 1-2 grame | 72,07 | 86,07 | 89,91 | 93,63 | 96,11 | 0,800 | 92,59 | 98,45 | 4 s + 3 s |
+| BM25 | **75,05** | **87,95** | **91,37** | **94,38** | **96,52** | **0,823** | 93,86 | 98,51 | 3 s + 30 s |
+
+- Fisiere: `results/retriever_metrics.json`, `results/retriever_tfidf_unigram_metrics.json`; figura `docs/figures/results_retriever_recall.png`
+- Observatii: BM25 e cel mai bun la toate k (+3 R@1 fata de TF-IDF cu bigrame), diferenta dispare la k=20. Articolul corect e in top-1 in ~93% din cazuri -> erorile sunt mai ales confuzii intre paragrafe din acelasi articol. Valorile sunt mari si pentru ca intrebarile SQuAD au fost scrise privind paragraful (suprapunere lexicala mare).
 
 ### 2026-10-27 — Reader DistilBERT si BERT-base (Colab T4)
 - Comanda: `notebooks/train_colab.ipynb` -> `python -m src.qa.train --model-name <model> --epochs 2 --lr 3e-5 --batch-size 16|12 --max-length 384 --stride 128 --seed 42 --fp16 --push-to-hub`

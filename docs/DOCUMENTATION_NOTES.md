@@ -44,9 +44,18 @@ Figurile se salveaza in `docs/figures/` (PNG, nume descriptive, ex. `eda_context
 - Antrenare: `Trainer` HF, 2 epoci, lr 3e-5, warmup 10%, weight decay 0,01, fp16, Colab T4. Modele: `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`.
 - Rezultate (validation): DistilBERT EM 77,61 / F1 85,55 (29 min pe T4); BERT-base EM 81,22 / F1 88,54 (63 min). Ambele egale cu valorile din articole (77,7 / 85,8 si 80,8 / 88,5).
 ### 4.3 Retriever (TF-IDF, BM25)
-_de completat_
+- Scop: pentru open-domain, gasirea paragrafului relevant dintr-o colectie (2.067 paragrafe din 48 de articole Wikipedia, validation SQuAD).
+- Tokenizare comuna: NLTK `word_tokenize` + PorterStemmer, fara stopwords (aceeasi ca la baseline).
+- TF-IDF (sklearn): unigrame + bigrame, tf sublinear (1 + log tf), similaritate cosine intre intrebare si paragraf.
+- BM25 (rank-bm25, Okapi): saturatia frecventei termenului (k1 = 1,5) si normalizare dupa lungimea documentului (b = 0,75).
+- Evaluare: Recall@k (paragraful sursa al intrebarii in top-k), MRR, si Recall@k la nivel de articol.
+- Rezultate: BM25 R@1 75,1 / R@5 91,4 / R@20 96,5; TF-IDF 1-2 grame 72,1 / 89,9 / 96,1; TF-IDF unigrame 69,7 / 89,4 / 96,2.
+- Interpretare: BM25 e mai bun mai ales la k mic; bigramele ajuta TF-IDF (+2,4 R@1). Articolul corect e gasit in top-1 in ~93% din cazuri, deci greselile sunt intre paragrafe din acelasi articol (lexical foarte asemanatoare). Limitare: intrebarile SQuAD au fost scrise privind paragraful, deci suprapunerea lexicala e mai mare decat in open-domain real.
 ### 4.4 Pipeline open-domain
-_de completat_
+- Arhitectura retriever-reader (ca in DrQA, Chen et al., 2017): intrebare -> BM25 top-k paragrafe -> reader-ul citeste toate paragrafele intr-un batch -> raspunsul cu scorul maxim al reader-ului.
+- `src/qa/pipeline.py`: clasa `OpenDomainQA` (folosita si in demo), CLI pentru o intrebare (`--question`) sau evaluare.
+- Rezultate (500 intrebari, DistilBERT): EM/F1 57,2/65,8 (k=1), 61,2/69,0 (k=3), 62,8/69,8 (k=10); cu paragraful corect dat: 74,6/83,6.
+- Interpretare: recall-ul BM25 creste de la 76% la 94% (k 1 -> 10), dar raspunsul vine din paragraful corect doar in ~75% din cazuri la orice k. Scorurile reader-ului nu sunt calibrate intre paragrafe, iar paragrafele din acelasi articol contin span-uri plauzibile (exemplu: "Which NFL team won Super Bowl 50?" -> paragraful clasat primul raspunde "Carolina Panthers", al doilea "Denver"). Pierderea totala fata de limita superioara: ~14 F1, jumatate din retrieval (k=1) si jumatate din alegerea gresita intre paragrafe.
 
 ## 5. Rezultate
 Cifrele oficiale sunt in `docs/EXPERIMENTS.md`; aici se pun tabelele finale si interpretarea. Tabelele se regenereaza cu `notebooks/results.ipynb`.
@@ -84,6 +93,8 @@ _de completat_
 | `eda_answer_sentence_position.png` | in a cata propozitie e raspunsul | 4.1 Baseline | `notebooks/eda.ipynb` |
 | `eda_paragraphs_per_article.png` | paragrafe per articol in corpusul retriever | 4.3 Retriever | `notebooks/eda.ipynb` |
 | `results_f1_by_question_type.png` | F1 baseline vs DistilBERT vs BERT pe tip de intrebare | 5. Rezultate | `notebooks/results.ipynb` |
+| `results_retriever_recall.png` | Recall@k TF-IDF (1-2 grame, unigrame) vs BM25 | 4.3 Retriever / 5. Rezultate | `notebooks/results.ipynb` |
+| `results_pipeline_topk.png` | pipeline BM25 + DistilBERT: Recall@k, EM, F1 vs k + limita superioara | 4.4 Pipeline / 5. Rezultate | `notebooks/results.ipynb` |
 
 ## Observatii de mentionat in documentatie
 - Antrenarea s-a facut pe Colab (T4); local doar CPU, deci local s-a testat pe subseturi mici.
