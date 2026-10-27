@@ -15,7 +15,8 @@ Faza 3 — reader BERT. Codul e gata si validat local; urmeaza antrenarea pe Col
 ## In lucru
 - Antrenarea pe Colab (utilizatorul): DistilBERT apoi BERT-base -> `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`
   - inainte: commit + push pe GitHub (notebook-ul cloneaza repo-ul)
-  - in Colab: runtime T4, secret `HF_TOKEN` (iconita cheie din stanga), Run All
+  - in Colab: runtime T4, secrete `HF_TOKEN` + `GH_TOKEN` (repo-ul GitHub e privat; token fine-grained read-only), Run All
+  - prima incercare (2026-10-27) a esuat la `git clone` pentru ca repo-ul e privat; notebook-ul a fost modificat sa accepte `GH_TOKEN`
 
 ## Urmatorii pasi
 1. Dupa Colab: descarca metricile de pe Hub (`results/` din repo-urile modelelor) in `results/`, trece EM/F1/durata in EXPERIMENTS.md, comparatie cu baseline-ul
