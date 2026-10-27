@@ -8,7 +8,8 @@ Fiecare antrenare/evaluare: data, model, hiperparametri, EM, F1, Recall@k, link 
 
 | Data | Model | EM | F1 | HF Hub |
 |------|-------|----|----|--------|
-| — | — | — | — | — |
+| 2026-10-27 | Baseline clasic (TF-IDF + NER, top-1 propozitie) | 18.98 | 24.68 | — |
+| 2026-10-27 | Baseline clasic (TF-IDF + NER, top-2 propozitii) | 19.76 | 25.56 | — |
 
 ### Retriever
 
@@ -23,6 +24,19 @@ Fiecare antrenare/evaluare: data, model, hiperparametri, EM, F1, Recall@k, link 
 | — | — | — | — | — | — |
 
 ## Detalii
+
+### 2026-10-27 — Baseline clasic (TF-IDF sentence selection + spaCy NER rules)
+- Model: `src/qa/baseline.py`, fara deep learning
+- Date: TF-IDF fit pe 93.596 propozitii din paragrafele train (vocab 74.093 stem-uri); evaluare pe validation complet (10.570 intrebari)
+- Configuratie: tokenizer NLTK `word_tokenize` + PorterStemmer, stopwords sklearn; spaCy `en_core_web_sm`; reguli NER: when -> DATE/TIME, how many -> CARDINAL/QUANTITY, how much -> MONEY/CARDINAL/PERCENT/QUANTITY, who/whom/whose -> PERSON/ORG/NORP, where -> GPE/LOC/FAC/ORG; fallback primul noun chunk care nu apare in intrebare
+- Comanda: `python -m src.qa.baseline` (top-1), `python -m src.qa.baseline --top-sentences 2 --output-prefix results/baseline_top2`
+- Rezultate top-1: EM 18.98, F1 24.68, sentence accuracy 76.13% (`results/baseline_metrics.json`)
+- Rezultate top-2: EM 19.76, F1 25.56, sentence accuracy 76.93% (`results/baseline_top2_metrics.json`)
+- Pe tip de intrebare (top-1, EM / F1): when 56.2 / 60.1, how many 42.6 / 49.2, who 35.4 / 41.6, how much 30.5 / 41.4, where 22.9 / 29.4, which 12.0 / 18.6, what 10.6 / 16.1, why 5.2 / 10.1, how 3.7 / 8.8
+- Metoda de raspuns (top-1): noun chunk 8.120, entitate 2.399, propozitie intreaga 51
+- Verificare: EM/F1 identice cu metrica `squad` din HF `evaluate` (18.98 / 24.68)
+- Mediu: local CPU, ~90 s per rulare (30 s fit TF-IDF, 25 s spaCy, restul inferenta)
+- Observatii: propozitia corecta e gasita in 76% din cazuri, dar EM e doar 19% -> pierderea mare e la extragerea span-ului, nu la selectia propozitiei. Regulile NER merg bine (when/how many/who); what/how/why (63% din date) cad pe fallback-ul noun chunk si sunt slabe. Top-2 ajuta putin (+0.8 EM) fiindca permite cautarea entitatii si in a doua propozitie. Raman ca referinta top-1 (top-2 a fost ales privind validation).
 
 <!--
 ### YYYY-MM-DD — <model / experiment>

@@ -7,15 +7,15 @@ Cerintele temei si unde sunt acoperite in proiect. De verificat inainte de preda
 | Model extractiv bazat pe BERT | `src/qa/reader.py`, `src/qa/train.py` | de facut |
 | Raspuns pe baza unui pasaj | reader + demo, mod pasaj dat | de facut |
 | Data loading | `src/qa/data.py` | gata |
-| Preprocessing | `src/qa/preprocess.py` | de facut |
-| Model | baseline, reader, retriever | de facut |
-| Evaluation (EM, F1, Recall@k) | `src/qa/evaluate.py` | de facut |
+| Preprocessing | `src/qa/preprocess.py` | gata |
+| Model | baseline (gata), reader, retriever | partial |
+| Evaluation (EM, F1, Recall@k) | `src/qa/evaluate.py`: EM/F1 gata (validat cu HF), Recall@k de facut | partial |
 | Analiza exploratorie a datelor | `notebooks/eda.ipynb`, figuri in `docs/figures/` | gata |
-| NLTK folosit vizibil | EDA: `word_tokenize`, Punkt sentence split (gata); baseline: de facut | partial |
-| spaCy folosit vizibil | EDA: NER pe pasaje (gata); baseline: NER + reguli (de facut) | partial |
-| scikit-learn folosit vizibil | TF-IDF (baseline + retriever) | de facut |
+| NLTK folosit vizibil | Punkt sentence split, `word_tokenize`, PorterStemmer (EDA + baseline) | gata |
+| spaCy folosit vizibil | NER + noun chunks (EDA + baseline) | gata |
+| scikit-learn folosit vizibil | TF-IDF baseline (gata), retriever (de facut) | partial |
 | Hugging Face folosit vizibil | `datasets` (gata), `transformers`, HF Hub | partial |
-| Comparatie baseline vs DistilBERT vs BERT | `docs/EXPERIMENTS.md` | de facut |
+| Comparatie baseline vs DistilBERT vs BERT | `docs/EXPERIMENTS.md` (baseline gata) | partial |
 | Analiza erorilor | notebook / `evaluate.py` | de facut |
 | Demo | `app/app.py` (Gradio) | de facut |
 | Rulabil pe laptopul profesorului | `docs/DEPLOYMENT.md` | partial |

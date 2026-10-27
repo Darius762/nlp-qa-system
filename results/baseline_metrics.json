@@ -1,0 +1,105 @@
+{
+  "count": 10570,
+  "exact_match": 18.98,
+  "f1": 24.68,
+  "missing_predictions": 0,
+  "by_question_type": {
+    "what": {
+      "count": 6022,
+      "exact_match": 10.56,
+      "f1": 16.09
+    },
+    "who": {
+      "count": 1108,
+      "exact_match": 35.38,
+      "f1": 41.59
+    },
+    "when": {
+      "count": 713,
+      "exact_match": 56.24,
+      "f1": 60.13
+    },
+    "which": {
+      "count": 699,
+      "exact_match": 12.02,
+      "f1": 18.56
+    },
+    "how many": {
+      "count": 638,
+      "exact_match": 42.63,
+      "f1": 49.24
+    },
+    "where": {
+      "count": 477,
+      "exact_match": 22.85,
+      "f1": 29.35
+    },
+    "how": {
+      "count": 433,
+      "exact_match": 3.7,
+      "f1": 8.77
+    },
+    "why": {
+      "count": 155,
+      "exact_match": 5.16,
+      "f1": 10.07
+    },
+    "how much": {
+      "count": 154,
+      "exact_match": 30.52,
+      "f1": 41.39
+    },
+    "other": {
+      "count": 94,
+      "exact_match": 12.77,
+      "f1": 17.23
+    },
+    "whose": {
+      "count": 40,
+      "exact_match": 40.0,
+      "f1": 44.21
+    },
+    "whom": {
+      "count": 37,
+      "exact_match": 35.14,
+      "f1": 40.09
+    }
+  },
+  "by_context_length": {
+    "100-149": {
+      "count": 4277,
+      "exact_match": 18.8,
+      "f1": 24.65
+    },
+    "<100": {
+      "count": 3850,
+      "exact_match": 19.38,
+      "f1": 25.12
+    },
+    "150-199": {
+      "count": 1633,
+      "exact_match": 19.29,
+      "f1": 24.39
+    },
+    ">=200": {
+      "count": 810,
+      "exact_match": 17.41,
+      "f1": 23.28
+    }
+  },
+  "sentence_accuracy": 76.13,
+  "answer_method": {
+    "noun_chunk": 8120,
+    "entity": 2399,
+    "sentence": 51
+  },
+  "config": {
+    "split": "validation",
+    "n_samples": null,
+    "seed": 42,
+    "cache_dir": "data/hf_cache",
+    "spacy_model": "en_core_web_sm",
+    "top_sentences": 1,
+    "output_prefix": "results/baseline"
+  }
+}

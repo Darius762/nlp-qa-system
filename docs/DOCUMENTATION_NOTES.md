@@ -23,13 +23,18 @@ Figurile se salveaza in `docs/figures/` (PNG, nume descriptive, ex. `eda_context
 
 ## 3. Pipeline (data loading -> preprocessing -> model -> evaluation)
 - Data loading: `src/qa/data.py`, cu subset reproductibil (seed) si corpus de paragrafe unice cu `paragraph_id`, plus maparea intrebare -> paragraf corect.
-- Preprocessing: _de completat_
+- Preprocessing: `src/qa/preprocess.py` — normalizarea oficiala SQuAD a raspunsurilor, sentence split NLTK Punkt cu offset-uri de caractere, tokenizare NLTK + PorterStemmer pentru TF-IDF, tipul intrebarii (primul cuvant interogativ, cu "how many"/"how much" separat), eticheta NER a unui span.
 - Modele: _de completat_
-- Evaluare: _de completat_
+- Evaluare: `src/qa/evaluate.py` — EM si F1 pe tokeni dupa normalizare, maxim peste raspunsurile de referinta; defalcare pe tip de intrebare si lungime pasaj (<100, 100-149, 150-199, >=200 cuvinte). Validat: rezultate identice cu metrica `squad` din HF `evaluate`.
 
 ## 4. Metode
 ### 4.1 Baseline clasic
-_de completat_
+- Pasul 1, selectia propozitiei: TF-IDF (sklearn) pe tokeni NLTK cu stemming, antrenat pe 93.596 propozitii din train; propozitia cu cosine maxim fata de intrebare.
+- Pasul 2, extragerea raspunsului: tipul intrebarii -> etichete NER spaCy acceptate (when -> DATE/TIME, how many -> CARDINAL/QUANTITY, how much -> MONEY/CARDINAL/PERCENT/QUANTITY, who/whom/whose -> PERSON/ORG/NORP, where -> GPE/LOC/FAC/ORG); se ia prima entitate potrivita care nu apare deja in intrebare.
+- Fallback (what/which/how/why sau fara entitate): primul noun chunk spaCy din propozitie care nu apare in intrebare.
+- Varianta top-k: entitatea se cauta in primele k propozitii (k=1 referinta, k=2 testat).
+- Rezultat (validation): EM 18,98, F1 24,68; propozitia corecta aleasa in 76,1% din cazuri.
+- Interpretare: selectia propozitiei merge relativ bine, pierderea e la extragerea span-ului; regulile NER functioneaza pe tipurile cu entitate clara (when EM 56, how many 43, who 35), iar what/how/why (63% din date) raman slabe (EM 4-11). Asta motiveaza reader-ul BERT, care invata direct span-ul.
 ### 4.2 Reader (DistilBERT, BERT-base)
 _de completat_
 ### 4.3 Retriever (TF-IDF, BM25)

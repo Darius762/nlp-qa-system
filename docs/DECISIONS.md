@@ -26,3 +26,18 @@ Jurnal de decizii. Format: data — decizie — motiv — alternative respinse.
 - **Decizie:** corpusul pentru open-domain contine paragrafele unice din split-ul validation (48 articole, 2067 paragrafe). `build_corpus` accepta mai multe split-uri, deci se poate extinde ulterior cu train.
 - **Motiv:** rapid pe CPU, intrebarile de evaluare au paragraful corect in corpus, setup folosit frecvent in proiecte similare.
 - **Alternative respinse (deocamdata):** train + validation (~20k paragrafe), mai realist, dar mai lent; ramane optiune de extindere.
+
+## 2026-10-27 — Baseline: TF-IDF antrenat pe propozitiile din train
+- **Decizie:** vectorizer-ul TF-IDF al baseline-ului se antreneaza pe propozitiile paragrafelor din train (93.596 propozitii), tokenizare NLTK + PorterStemmer, stopwords sklearn.
+- **Motiv:** nimic din datele de evaluare nu influenteaza modelul; IDF calculat pe propozitii, aceeasi unitate pe care o clasificam.
+- **Alternative respinse:** fit pe paragrafele din validation (vocabular/IDF din datele de evaluare).
+
+## 2026-10-27 — Baseline: reguli NER din EDA + fallback noun chunk
+- **Decizie:** tipul intrebarii (primul cuvant interogativ) decide etichetele NER acceptate; entitatile care apar deja in intrebare sunt eliminate; daca nu exista entitate potrivita, raspunsul e primul noun chunk din propozitia aleasa care nu apare in intrebare. Referinta oficiala ramane varianta cu top-1 propozitie.
+- **Motiv:** regulile vin direct din heatmap-ul din EDA (when -> DATE 79%, how many -> CARDINAL 68% etc.); top-1 ramane referinta ca sa nu alegem configuratia privind setul de evaluare.
+- **Alternative respinse:** clasificator de tip de raspuns antrenat (iese din ideea de baseline cu reguli); intoarcerea propozitiei intregi (F1 foarte mic, raspunsurile au mediana 2 tokeni).
+
+## 2026-10-27 — Metrici: implementare proprie EM/F1, validata cu HF
+- **Decizie:** `src/qa/evaluate.py` implementeaza EM/F1 dupa scriptul oficial SQuAD (normalizare + maxim peste referinte), cu defalcare pe tip de intrebare si lungime pasaj; `--check-hf` compara cu metrica `squad` din HF `evaluate`.
+- **Motiv:** avem nevoie de scoruri per exemplu pentru analiza erorilor; validarea arata ca cifrele sunt identice cu cele oficiale.
+- **Alternative respinse:** doar HF `evaluate` (nu da scoruri per exemplu).

@@ -52,7 +52,9 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 |-----|---------|---------------|--------|
 | Data loading | `python -m src.qa.data --split validation` | < 1 min | statistici in consola |
 | EDA | deschide `notebooks/eda.ipynb` in VS Code/Jupyter, kernel din `.venv`, Run All | ~1-2 min | grafice in `docs/figures/` |
-| Baseline | _de completat_ | | |
+| Preprocessing (exemple) | `python -m src.qa.preprocess --n-samples 3` | < 30 s | exemple procesate in consola |
+| Baseline | `python -m src.qa.baseline` (test rapid: `--n-samples 200 --output-prefix results/baseline_test`) | ~1,5 min (200 ex: ~35 s) | `results/baseline_predictions.json`, `results/baseline_metrics.json` |
+| Evaluare predictii | `python -m src.qa.evaluate --predictions results/baseline_predictions.json [--check-hf]` | < 30 s | `results/baseline_metrics.json` |
 | Reader (evaluare) | _de completat_ | | |
 | Retriever | _de completat_ | | |
 | Pipeline | _de completat_ | | |
@@ -61,8 +63,11 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 ## Probleme cunoscute
 - Pe Windows, HF afiseaza un warning despre symlinks; se poate ignora.
 - Primul acces la HF Hub poate afisa un warning ca lipseste `HF_TOKEN`; nu e necesar pentru dataset si modele publice.
+- Prima rulare a baseline-ului descarca si split-ul train (~30 MB) pentru fit-ul TF-IDF.
+- `--check-hf` din `src.qa.evaluate` descarca o data metrica `squad` din HF `evaluate`.
 
 ## Verificat pe
 | Data | Sistem | Python | Rezultat |
 |------|--------|--------|----------|
 | 2026-10-26 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.data` OK, `eda.ipynb` OK |
+| 2026-10-27 | Windows 10, CPU (dezvoltare) | 3.13.1 | `src.qa.preprocess`, `src.qa.baseline`, `src.qa.evaluate --check-hf` OK |
