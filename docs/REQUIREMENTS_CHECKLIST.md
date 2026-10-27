@@ -4,7 +4,7 @@ Cerintele temei si unde sunt acoperite in proiect. De verificat inainte de preda
 
 | Cerinta | Unde | Stare |
 |---------|------|-------|
-| Model extractiv bazat pe BERT | `src/qa/reader.py`, `src/qa/train.py` (cod gata si validat, antrenare pe Colab de facut) | partial |
+| Model extractiv bazat pe BERT | `src/qa/reader.py`, `src/qa/train.py`; DistilBERT 77,6/85,6 si BERT-base 81,2/88,5 pe HF Hub | gata |
 | Raspuns pe baza unui pasaj | reader + demo, mod pasaj dat | de facut |
 | Data loading | `src/qa/data.py` | gata |
 | Preprocessing | `src/qa/preprocess.py` | gata |
@@ -15,7 +15,7 @@ Cerintele temei si unde sunt acoperite in proiect. De verificat inainte de preda
 | spaCy folosit vizibil | NER + noun chunks (EDA + baseline) | gata |
 | scikit-learn folosit vizibil | TF-IDF baseline (gata), retriever (de facut) | partial |
 | Hugging Face folosit vizibil | `datasets` (gata), `transformers`, HF Hub | partial |
-| Comparatie baseline vs DistilBERT vs BERT | `docs/EXPERIMENTS.md` (baseline gata) | partial |
+| Comparatie baseline vs DistilBERT vs BERT | `docs/EXPERIMENTS.md`, `notebooks/results.ipynb`, figura in `docs/figures/` | gata |
 | Analiza erorilor | notebook / `evaluate.py` | de facut |
 | Demo | `app/app.py` (Gradio) | de facut |
 | Rulabil pe laptopul profesorului | `docs/DEPLOYMENT.md` | partial |

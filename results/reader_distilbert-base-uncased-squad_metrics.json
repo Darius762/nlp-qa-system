@@ -1,0 +1,127 @@
+{
+  "count": 10570,
+  "exact_match": 77.61,
+  "f1": 85.55,
+  "missing_predictions": 0,
+  "by_question_type": {
+    "what": {
+      "count": 6022,
+      "exact_match": 76.7,
+      "f1": 85.08
+    },
+    "who": {
+      "count": 1108,
+      "exact_match": 85.74,
+      "f1": 89.2
+    },
+    "when": {
+      "count": 713,
+      "exact_match": 87.94,
+      "f1": 91.04
+    },
+    "which": {
+      "count": 699,
+      "exact_match": 80.83,
+      "f1": 86.88
+    },
+    "how many": {
+      "count": 638,
+      "exact_match": 84.01,
+      "f1": 89.39
+    },
+    "where": {
+      "count": 477,
+      "exact_match": 73.17,
+      "f1": 83.49
+    },
+    "how": {
+      "count": 433,
+      "exact_match": 57.27,
+      "f1": 75.15
+    },
+    "why": {
+      "count": 155,
+      "exact_match": 50.32,
+      "f1": 72.79
+    },
+    "how much": {
+      "count": 154,
+      "exact_match": 79.87,
+      "f1": 87.51
+    },
+    "other": {
+      "count": 94,
+      "exact_match": 47.87,
+      "f1": 69.13
+    },
+    "whose": {
+      "count": 40,
+      "exact_match": 80.0,
+      "f1": 88.92
+    },
+    "whom": {
+      "count": 37,
+      "exact_match": 83.78,
+      "f1": 87.39
+    }
+  },
+  "by_context_length": {
+    "100-149": {
+      "count": 4277,
+      "exact_match": 78.33,
+      "f1": 85.83
+    },
+    "<100": {
+      "count": 3850,
+      "exact_match": 77.14,
+      "f1": 85.29
+    },
+    "150-199": {
+      "count": 1633,
+      "exact_match": 76.85,
+      "f1": 85.12
+    },
+    ">=200": {
+      "count": 810,
+      "exact_match": 77.53,
+      "f1": 86.14
+    }
+  },
+  "n_features": 10784,
+  "train": {
+    "train_runtime": 1763.9646,
+    "train_samples_per_second": 100.369,
+    "train_steps_per_second": 6.273,
+    "total_flos": 1.7348902540849152e+16,
+    "train_loss": 1.3174634396049572,
+    "epoch": 2.0
+  },
+  "device": "Tesla T4",
+  "total_seconds": 1901,
+  "config": {
+    "model_name": "distilbert-base-uncased",
+    "output_dir": "checkpoints/distilbert-base-uncased-squad",
+    "cache_dir": "data/hf_cache",
+    "epochs": 2.0,
+    "max_steps": -1,
+    "lr": 3e-05,
+    "batch_size": 16,
+    "eval_batch_size": 64,
+    "weight_decay": 0.01,
+    "warmup": 0.1,
+    "max_length": 384,
+    "stride": 128,
+    "n_best": 20,
+    "max_answer_length": 30,
+    "train_samples": null,
+    "eval_samples": null,
+    "seed": 42,
+    "fp16": true,
+    "logging_steps": 100,
+    "save_steps": 1000,
+    "push_to_hub": true,
+    "hub_model_id": "dariurs/distilbert-base-uncased-squad",
+    "resume_from_hub": false,
+    "results_dir": "results"
+  }
+}

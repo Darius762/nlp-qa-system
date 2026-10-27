@@ -42,14 +42,26 @@ Figurile se salveaza in `docs/figures/` (PNG, nume descriptive, ex. `eda_context
 - Inferenta: pentru fiecare fereastra, top-20 start x top-20 end, doar combinatii valide (in pasaj, end >= start, <= 30 tokeni), scor = logit start + logit end; se alege cel mai bun span din toate ferestrele si se mapeaza inapoi in text cu offset-urile.
 - Validarea codului: pe un model public antrenat (distilbert-base-cased-distilled-squad) obtinem EM 78,6 / F1 86,3 pe 500 exemple, practic scorurile publicate (79,1 / 86,9).
 - Antrenare: `Trainer` HF, 2 epoci, lr 3e-5, warmup 10%, weight decay 0,01, fp16, Colab T4. Modele: `dariurs/distilbert-base-uncased-squad`, `dariurs/bert-base-uncased-squad`.
-- Rezultate: _de completat dupa Colab_
+- Rezultate (validation): DistilBERT EM 77,61 / F1 85,55 (29 min pe T4); BERT-base EM 81,22 / F1 88,54 (63 min). Ambele egale cu valorile din articole (77,7 / 85,8 si 80,8 / 88,5).
 ### 4.3 Retriever (TF-IDF, BM25)
 _de completat_
 ### 4.4 Pipeline open-domain
 _de completat_
 
 ## 5. Rezultate
-Cifrele oficiale sunt in `docs/EXPERIMENTS.md`; aici se pun tabelele finale si interpretarea.
+Cifrele oficiale sunt in `docs/EXPERIMENTS.md`; aici se pun tabelele finale si interpretarea. Tabelele se regenereaza cu `notebooks/results.ipynb`.
+
+| Model | EM | F1 |
+|---|---|---|
+| Baseline (TF-IDF + NER) | 18,98 | 24,68 |
+| DistilBERT | 77,61 | 85,55 |
+| BERT-base | 81,22 | 88,54 |
+
+- Salt enorm de la baseline la reader (+59 EM): baseline-ul alege bine propozitia (76%), dar nu stie sa extraga span-ul; BERT invata direct granitele raspunsului.
+- BERT-base vs DistilBERT: +3,6 EM / +3,0 F1, la cost ~2x (parametri, timp de antrenare 63 vs 29 min).
+- Pe tipuri: baseline-ul e competitiv relativ doar unde regulile NER se aplica (when F1 60, how many 49); pe what/which/how/why e sub 20 F1, iar reader-ul e peste 72 peste tot.
+- why/how sunt cele mai grele si pentru BERT (EM 50-68, F1 73-83): raspunsuri lungi, explicative, granite ambigue.
+- Lungimea pasajului nu conteaza (variatie < 1,5 F1) -> sliding window-ul nu pierde informatie.
 
 ## 6. Analiza erorilor
 _de completat: pe tip de intrebare, lungime pasaj, exemple concrete de greseli_
@@ -71,6 +83,7 @@ _de completat_
 | `eda_qtype_entity_heatmap.png` | % entitate raspuns per tip de intrebare (baza regulilor baseline) | 4.1 Baseline | `notebooks/eda.ipynb` |
 | `eda_answer_sentence_position.png` | in a cata propozitie e raspunsul | 4.1 Baseline | `notebooks/eda.ipynb` |
 | `eda_paragraphs_per_article.png` | paragrafe per articol in corpusul retriever | 4.3 Retriever | `notebooks/eda.ipynb` |
+| `results_f1_by_question_type.png` | F1 baseline vs DistilBERT vs BERT pe tip de intrebare | 5. Rezultate | `notebooks/results.ipynb` |
 
 ## Observatii de mentionat in documentatie
 - Antrenarea s-a facut pe Colab (T4); local doar CPU, deci local s-a testat pe subseturi mici.

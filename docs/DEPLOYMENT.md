@@ -43,8 +43,9 @@ python -m src.qa.data --split validation
 
 ## Modele
 Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
-- DistilBERT fine-tuned: https://huggingface.co/dariurs/distilbert-base-uncased-squad (_dupa antrenarea pe Colab_)
-- BERT-base fine-tuned: https://huggingface.co/dariurs/bert-base-uncased-squad (_dupa antrenarea pe Colab_)
+- DistilBERT fine-tuned: https://huggingface.co/dariurs/distilbert-base-uncased-squad (public, EM 77,61 / F1 85,55)
+- BERT-base fine-tuned: https://huggingface.co/dariurs/bert-base-uncased-squad (public, EM 81,22 / F1 88,54)
+- Verificat local: `QAReader("dariurs/distilbert-base-uncased-squad")` se incarca in ~16 s si raspunde in ~0,3 s/intrebare pe CPU.
 - Modelele se descarca in cache-ul HF implicit (`~/.cache/huggingface`, pe Windows `C:\Users\<user>\.cache\huggingface`), ~260 MB DistilBERT, ~420 MB BERT-base.
 
 ## Antrenare (doar pe Colab, nu e necesara pentru rulare)
@@ -61,6 +62,7 @@ Nu sunt in git. Se descarca automat de pe Hugging Face Hub:
 | Evaluare predictii | `python -m src.qa.evaluate --predictions results/baseline_predictions.json [--check-hf]` | < 30 s | `results/baseline_metrics.json` |
 | Reader (evaluare) | `python -m src.qa.reader --model dariurs/distilbert-base-uncased-squad` (test rapid: `--n-samples 200`) | DistilBERT: ~0,3 s/intrebare (200 ex: ~1 min; tot setul ~45-60 min) | `results/reader_<model>_predictions.json`, `_metrics.json` |
 | Train (smoke test) | `python -m src.qa.train --train-samples 200 --eval-samples 100 --max-steps 10 --batch-size 8` | ~2-3 min | `checkpoints/` (ignorat de git) |
+| Rezultate + figuri comparatie | `notebooks/results.ipynb`, Run All | < 10 s | tabele + `docs/figures/results_*.png` |
 | Retriever | _de completat_ | | |
 | Pipeline | _de completat_ | | |
 | Demo | _de completat_ | | |
